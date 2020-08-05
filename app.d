@@ -157,113 +157,178 @@ void main()
     // {
     //     writeln(C[i]);
     // }
+    write("全体のエントロピー: ");
+    writeln(allEntropy(C));
+    write("若年のエントロピー: ");
+    writeln(eachAgeEntropy(C, "若年"));
+    write("中年のエントロピー: ");
+    writeln(eachAgeEntropy(C, "中年"));
+    write("高年のエントロピー: ");
+    writeln(eachAgeEntropy(C, "高年"));
+    double 年齢の情報利得 = allEntropy(C) - (cast(double) 8 / 24 * eachAgeEntropy(C,
+            "若年") + cast(double) 8 / 24 * eachAgeEntropy(C,
+            "中年") + cast(double) 8 / 24 * eachAgeEntropy(C, "高年"));
+    write("年齢の情報利得は");
+    writeln(年齢の情報利得);
+    // writeln(eachIg(C, "近視", "遠視", 2));
+    // writeln(eachIg(C, "あり", "なし", 3));
+    // writeln(eachIg(C, "少", "正常", 4));
+    eachIg(C, "近視", "遠視", 2);
+    eachIg(C, "あり", "なし", 3);
+    eachIg(C, "少", "正常", 4);
+}
 
-    long 若年ソフト;
-    long 若年ハード;
-    long 若年勧められない;
+double eachAgeEntropy(string[][] C, string age)
+{
+    long ソフトの数;
+    long ハードの数;
+    long 勧められない数;
+    double エントロピー;
     foreach (i; 0 .. (C.length))
     {
-        if (C[i][0] == "若年" && C[i][4] == "ソフト")
+        if (C[i][0] == age && C[i][4] == "ソフト")
         {
-            若年ソフト += 1;
+            ソフトの数 += 1;
         }
-        else if (C[i][0] == "若年" && C[i][4] == "ハード")
+        else if (C[i][0] == age && C[i][4] == "ハード")
         {
-            若年ハード += 1;
+            ハードの数 += 1;
         }
-        else if (C[i][0] == "若年" && C[i][4] == "勧められない")
+        else if (C[i][0] == age && C[i][4] == "勧められない")
         {
-            若年勧められない += 1;
+            勧められない数 += 1;
         }
     }
-    writeln("若年ソフト:", 若年ソフト, " 若年ハード:",
-            若年ハード, " 若年勧められない:", 若年勧められない);
-    long 中年ソフト;
-    long 中年ハード;
-    long 中年勧められない;
+    エントロピー = (cast(double) ソフトの数 / 8 * log10(
+            cast(double) ソフトの数 / 8) + cast(double) ハードの数 / 8 * log10(
+            cast(double) ハードの数 / 8) + cast(double) 勧められない数 / 8 * log10(
+            cast(double) 勧められない数 / 8)) * (-1);
+    return エントロピー;
+}
+
+double allEntropy(string[][] C)
+{
+    long 全体のソフトの数;
+    long 全体のハードの数;
+    long 全体の勧められない数;
+    double 全体のエントロピー;
     foreach (i; 0 .. (C.length))
     {
-        if (C[i][0] == "中年" && C[i][4] == "ソフト")
+        if (C[i][4] == "ソフト")
         {
-            中年ソフト += 1;
+            全体のソフトの数 += 1;
         }
-        else if (C[i][0] == "中年" && C[i][4] == "ハード")
+        else if (C[i][4] == "ハード")
         {
-            中年ハード += 1;
+            全体のハードの数 += 1;
         }
-        else if (C[i][0] == "中年" && C[i][4] == "勧められない")
+        else if (C[i][4] == "勧められない")
         {
-            中年勧められない += 1;
+            全体の勧められない数 += 1;
         }
     }
-    writeln("中年ソフト:", 中年ソフト, " 中年ハード:",
-            中年ハード, " 中年勧められない:", 中年勧められない);
-    long 高年ソフト;
-    long 高年ハード;
-    long 高年勧められない;
+    全体のエントロピー = (cast(double) 全体のソフトの数 / 24 * (
+            log10(cast(double) 全体のソフトの数 / 24)) + cast(double) 全体のハードの数 / 24 * (
+            log10(cast(double) 全体のハードの数 / 24)) + cast(double) 全体の勧められない数 / 24 * (
+            log10(cast(double) 全体の勧められない数 / 24))) * (-1);
+    return 全体のエントロピー;
+}
+
+void eachIg(string[][] C, string x, string y, long z)
+{
+    string[] 項目 = [
+        "年齢", "近遠視", "乱視", "涙産出", "コンタクト"
+    ];
+    long xのソフトの数;
+    long xのハードの数;
+    long xの勧められない数;
+    long yのソフトの数;
+    long yのハードの数;
+    long yの勧められない数;
+    double xのエントロピー = 0;
+    double yのエントロピー = 0;
     foreach (i; 0 .. (C.length))
     {
-        if (C[i][0] == "高年" && C[i][4] == "ソフト")
+        if (C[i][z - 1] == x && C[i][4] == "ソフト")
         {
-            高年ソフト += 1;
+            xのソフトの数 += 1;
         }
-        else if (C[i][0] == "高年" && C[i][4] == "ハード")
+        else if (C[i][z - 1] == x && C[i][4] == "ハード")
         {
-            高年ハード += 1;
+            xのハードの数 += 1;
         }
-        else if (C[i][0] == "高年" && C[i][4] == "勧められない")
+        else if (C[i][z - 1] == x && C[i][4] == "勧められない")
         {
-            高年勧められない += 1;
+            xの勧められない数 += 1;
+        }
+        else if (C[i][z - 1] == y && C[i][4] == "ソフト")
+        {
+            yのソフトの数 += 1;
+        }
+        else if (C[i][z - 1] == y && C[i][4] == "ハード")
+        {
+            yのハードの数 += 1;
+        }
+        else if (C[i][z - 1] == y && C[i][4] == "勧められない")
+        {
+            yの勧められない数 += 1;
         }
     }
-    writeln("高年ソフト:", 高年ソフト, " 高年ハード:",
-            高年ハード, " 高年勧められない:", 高年勧められない);
-    writeln("log10(2):", log10(2));
-    // writeln(cast(double) 若年ソフト / 24);
-    double 若年エントロピーtmp1 = (cast(double) 若年ソフト / 8) * log10(
-            (cast(double) 若年ソフト / 8));
-    double 若年エントロピーtmp2 = (cast(double) 若年ハード / 8) * log10(
-            (cast(double) 若年ハード / 8));
-    double 若年エントロピーtmp3 = (cast(double) 若年勧められない / 8) * log10(
-            (cast(double) 若年勧められない / 8));
-    double 若年エントロピー = (
-            若年エントロピーtmp1 + 若年エントロピーtmp2
-            + 若年エントロピーtmp3) * (-1);
-    writeln("若年エントロピー:", 若年エントロピー);
+    // writeln(x, ":ソフトの数 ", xのソフトの数);
+    // writeln(x, ":ハードの数 ", xのハードの数);
+    // writeln(x, ":勧められないの数 ", xの勧められない数);
+    // writeln(y, ":ソフトの数 ", yのソフトの数);
+    // writeln(y, ":ハードの数 ", yのハードの数);
+    // writeln(y, ":勧められないの数 ", yの勧められない数);
+    if (xのソフトの数 != 0)
+    {
+        xのエントロピー += cast(double) xのソフトの数 / 12 * log10(
+                cast(double) xのソフトの数 / 12);
+    }
+    if (xのハードの数 != 0)
+    {
+        xのエントロピー += cast(double) xのハードの数 / 12 * log10(
+                cast(double) xのハードの数 / 12);
+    }
+    if (xの勧められない数 != 0)
+    {
+        xのエントロピー += cast(double) xの勧められない数 / 12 * log10(
+                cast(double) xの勧められない数 / 12);
+    }
+    if (yのソフトの数 != 0)
+    {
+        yのエントロピー += cast(double) yのソフトの数 / 12 * log10(
+                cast(double) yのソフトの数 / 12);
+    }
+    if (yのハードの数 != 0)
+    {
+        yのエントロピー += cast(double) yのハードの数 / 12 * log10(
+                cast(double) yのハードの数 / 12);
+    }
+    if (yの勧められない数 != 0)
+    {
+        yのエントロピー += cast(double) yの勧められない数 / 12 * log10(
+                cast(double) yの勧められない数 / 12);
+    }
+    if (xのエントロピー != 0)
+    {
+        xのエントロピー *= cast(double)(-1);
+    }
+    if (yのエントロピー != 0)
+    {
+        yのエントロピー *= cast(double)(-1);
+    }
 
-    double 中年エントロピーtmp1 = (cast(double) 中年ソフト / 8) * log10(
-            (cast(double) 中年ソフト / 8));
-    double 中年エントロピーtmp2 = (cast(double) 中年ハード / 8) * log10(
-            (cast(double) 中年ハード / 8));
-    double 中年エントロピーtmp3 = (cast(double) 中年勧められない / 8) * log10(
-            (cast(double) 中年勧められない / 8));
-    double 中年エントロピー = (
-            中年エントロピーtmp1 + 中年エントロピーtmp2
-            + 中年エントロピーtmp3) * (-1);
-    writeln("中年エントロピー:", 中年エントロピー);
-
-    double 高年エントロピーtmp1 = (cast(double) 高年ソフト / 8) * log10(
-            (cast(double) 高年ソフト / 8));
-    double 高年エントロピーtmp2 = (cast(double) 高年ハード / 8) * log10(
-            (cast(double) 高年ハード / 8));
-    double 高年エントロピーtmp3 = (cast(double) 高年勧められない / 8) * log10(
-            (cast(double) 高年勧められない / 8));
-    double 高年エントロピー = (
-            高年エントロピーtmp1 + 高年エントロピーtmp2
-            + 高年エントロピーtmp3) * (-1);
-    writeln("高年エントロピー:", 高年エントロピー);
-    double 全体エントロピー = (
-            (cast(double) 5 / 24 * log10(cast(double) 5 / 24)) + (cast(
-            double) 4 / 24 * log10(cast(double) 4 / 24)) + (
-            cast(double) 15 / 24 * log10(cast(double) 15 / 24))) * (-1);
-    writeln("全体エントロピー:", 全体エントロピー);
-    writeln(全体エントロピー - (cast(double) 8 / 24 * 若年エントロピー + cast(
-            double) 8 / 24 * 中年エントロピー + cast(double) 8 / 24
-            * 高年エントロピー));
+    // writeln(xのエントロピー, " : ", yのエントロピー);
+    writeln(x, "のエントロピー: ", xのエントロピー);
+    writeln(y, "のエントロピー: ", yのエントロピー);
+    double 各情報利得 = allEntropy(C) - ((cast(double) 12 / 24 * xのエントロピー) + (
+            cast(double) 12 / 24 * yのエントロピー));
+    writeln(項目[z - 1], "の情報利得: ", 各情報利得);
 
 }
 
-void scan(L...)(ref L A)
+longvoid scan(L...)(ref L A)
 {
     auto l = readln.split;
     foreach (i, T; L)
