@@ -328,7 +328,7 @@ void eachIg(string[][] C, string x, string y, long z)
 
 }
 
-longvoid scan(L...)(ref L A)
+void scan(L...)(ref L A)
 {
     auto l = readln.split;
     foreach (i, T; L)
